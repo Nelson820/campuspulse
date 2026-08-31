@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
 const pageTitles = {
@@ -11,13 +12,45 @@ const pageTitles = {
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const current = pageTitles[location.pathname] || pageTitles["/"];
+
+  const [profile, setProfile] = useState({ full_name: "", degree: "" });
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  async function loadProfile() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("full_name, degree")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setProfile({
+        full_name: data.full_name || "Student",
+        degree: data.degree || "",
+      });
+    }
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
     navigate("/login");
   }
+
+  const initials = profile.full_name
+    ? profile.full_name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "S";
 
   return (
     <header className="flex items-center justify-between border-gray-200 bg-white px-8 py-4">
@@ -38,16 +71,16 @@ function Navbar() {
 
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
-            NB
+            {initials}
           </div>
 
           <div>
             <p className="text-sm font-medium text-gray-900">
-              Student
+              {profile.full_name || "Student"}
             </p>
 
             <p className="text-sx text-gray-500">
-              Computer Science
+              {profile.degree}
             </p>
           </div>
         </div>
