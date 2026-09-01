@@ -83,7 +83,7 @@ npm run dev
 Full email confirmation is implemented and tested end-to-end using Supabase Auth + Resend SMTP. It's currently disabled for the public demo, since Resend's free tier restricts delivery to a single verified sending address — a paid, verified domain would be required to enable it for arbitrary users. In production, this would be re-enabled with a verified sending domain.
 
 ## What's next
-- Mobile-responsive layout refinements
+
 - A machine learning model to predict pass/fail likelihood from historical performance, replacing the current rule-based risk scoring
 - More sophisticated risk scoring (performance + assessment completion rate + trend combined)
 - Verified custom sending domain to re-enable email confirmation for all users
