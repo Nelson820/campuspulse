@@ -9,7 +9,7 @@ const pageTitles = {
   "/settings": { title: "Settings", subtitle: "Manage your preferences" },
 };
 
-function Navbar() {
+function Navbar({ onMenuClick }) {
   const navigate = useNavigate();
   const location = useLocation();
   const current = pageTitles[location.pathname] || pageTitles["/"];
@@ -53,19 +53,28 @@ function Navbar() {
     : "S";
 
   return (
-    <header className="flex items-center justify-between border-gray-200 bg-white px-8 py-4">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900">
-          {current.title}
-        </h2>
+    <header className="flex items-center justify-between border-gray-200 bg-white px-4 md:px-8 py-4">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden text-2xl leading-none text-gray-700"
+        >
+          ☰
+        </button>
 
-        <p className="text-sm text-gray-500">
-          {current.subtitle}
-        </p>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">
+            {current.title}
+          </h2>
+
+          <p className="text-sm text-gray-500 hidden sm:block">
+            {current.subtitle}
+          </p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button className="rounded-full p-2 hover:bg-gray-100">
+      <div className="flex items-center gap-2 md:gap-4">
+        <button className="rounded-full p-2 hover:bg-gray-100 hidden sm:block">
           🔔
         </button>
 
@@ -74,7 +83,7 @@ function Navbar() {
             {initials}
           </div>
 
-          <div>
+          <div className="hidden sm:block">
             <p className="text-sm font-medium text-gray-900">
               {profile.full_name || "Student"}
             </p>
